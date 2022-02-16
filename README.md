@@ -83,3 +83,17 @@ algorithm is finished when open set is empty OR we have reached the destination
 
 -- openSet has only one node: which is the starting node
 -- closedSet starts as empty
+
+# Looping through array backwards
+
+function removeFromArray(arr, element) {
+// loop through array backward so we do not skip an element
+for (let i = arr.length; i >= 0; i--) {
+if (arr[i] === element) {
+arr.splice(i, 1);
+}
+}
+}
+
+lets say we delete the element 6; so the next time the loop will run for i =7;
+but the element that was at 7 is now at 6 so we can miss checking that element.

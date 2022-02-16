@@ -1,3 +1,12 @@
+function removeFromArray(arr, element) {
+  // loop through array backward so we do not skip an element
+  for (let i = arr.length; i >= 0; i--) {
+    if (arr[i] === element) {
+      arr.splice(i, 1);
+    }
+  }
+}
+
 let grid = new Array();
 let cols = 5;
 let rows = 5;
@@ -69,7 +78,25 @@ function setup() {
 // draw function keeps looping as we are using p5
 function draw() {
   if (openSet.length > 0) {
-    //keep checking
+    // we assume current is the index with lowest f
+    let winner = 0;
+    for (let i = 0; i < openSet.length; i++) {
+      if (openSet[i].f < openSet[winner].f) {
+        winner = i;
+      }
+    }
+    let current = openSet[winner];
+
+    // if the winner is end that means we have reached
+    // the end; our loop if finished
+    if (openSet[winner] === end) {
+      console.log("DONE!");
+    }
+    // we remove the current because that is the lowest f we have
+    // so next we will evaluate that node
+
+    removeFromArray(openSet, current);
+    closedSet.push(current);
   } else {
     //no solution
   }
