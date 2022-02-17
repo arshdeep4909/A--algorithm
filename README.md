@@ -84,6 +84,35 @@ algorithm is finished when open set is empty OR we have reached the destination
 -- openSet has only one node: which is the starting node
 -- closedSet starts as empty
 
+# loop funcitonality of algorithm
+
+1.  So in set up we add a start point and push it openSet.
+    so we only have one node in openSet then we evaluate it once it is done we remove
+    it from OpenSet and then we push it to closedSet
+2.  the next step is to add neighbours of that node to the openSet
+    once we add neighbors then we need to define the g scores and then keep looping
+    until we reach the end
+3.  defining g scores as we are looping
+
+G SCORE FUNCTIONALITY
+
+- we evaluate the current node and then we add neighbors
+- we evaluate g scores for all the neighbors and remember them
+- when we are assigning g scores we can have different situations that we have to
+  keep in mind to make sure that we assign the shortest g scores to each nodes
+
+1. if a node is already in the closed Set then we do not need to compare as we have already found the most efficient path to that node
+2. if it is not in the closedSet then
+
+A. it can either be in an openset or it can be in neither of those
+
+if it is in neither one then we just give it the g score and then we add it to
+the openset( we do this to remember that we have given it a gscore and that we need
+to comapre it next time we loop over)
+
+B. it can be in openSet
+this means it has a previous g score so we need to compare and assign it the lowest gscore.
+
 # Looping through array backwards
 
 function removeFromArray(arr, element) {

@@ -28,7 +28,7 @@ function Spot(i, j) {
   this.f = 0;
   this.g = 0;
   this.h = 0;
-
+  this.neighbors = [];
   // every spot has a location (i, j)
   // and they also have a f, g and h value
 
@@ -38,10 +38,29 @@ function Spot(i, j) {
     fill(col);
     rect(this.i * w, this.j * h, w, h);
   };
+
+  // adding neighbor function
+  // we need to avoid adding certain neighbors if the node is
+  // on the edge
+  this.addNeighbors = function (grid) {
+    if (i < cols - 1) {
+      this.neighbors.push(grid[this.i + 1][this.j]);
+    }
+    if (i > 0) {
+      this.neighbors.push(grid[this.i - 1][this.j]);
+    }
+    if (j < rows - 1) {
+      this.neighbors.push(grid[this.i][this.j + 1]);
+    }
+
+    if (j > 0) {
+      this.neighbors.push(grid[this.i][this.j - 1]);
+    }
+  };
 }
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(800, 800);
 
   console.log("A*");
   // widht and height is the one define in our createCanvas property
@@ -58,6 +77,13 @@ function setup() {
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       grid[i][j] = new Spot(i, j);
+    }
+  }
+
+  // loop for adding neighbors
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      grid[i][j].addNeighbors(grid);
     }
   }
 
@@ -97,6 +123,34 @@ function draw() {
 
     removeFromArray(openSet, current);
     closedSet.push(current);
+
+    // we have the for loop to iterate over each neighbor
+    // now we wnat to give each neighbor that we evaluate a g score
+    // gscore = time taken (cost) to reach that node
+
+    // if we have already evaluted that node then we compare the old g with new g
+    // we assign the shorted g value to the node
+    let neighbors = current.neighbors;
+    for (let i = 0; i < neighbors.length; i++) {
+      let neighbor = neighbors[i];
+
+      if (!closedSet.includes(neighbor)) {
+        // here , current has g = 0; so every neighbor should have a g of +1
+        let tempG = current.g + 1;
+
+        if (openSet.includes(neighbor)) {
+          if (tempG < neighbor.g) {
+            neighbor.g = tempG;
+          }
+        } else {
+          neighbor.g = tempG;
+          // no we need to add it to the openSet so we know the next time
+          //we loop over the node that we have a previous g score that we
+          // need to compare to find the most efficient path
+          openSet.push(neighbor);
+        }
+      }
+    }
   } else {
     //no solution
   }
