@@ -7,9 +7,15 @@ function removeFromArray(arr, element) {
   }
 }
 
+function heuristic(a, b) {
+  // dist is a p5 function
+  var d = dist(a.i, a.j, b.i, b.j);
+  return d;
+}
+
 let grid = new Array();
-let cols = 5;
-let rows = 5;
+let cols = 25;
+let rows = 25;
 
 // defining openSet and closedSet as Arrays  in global variables
 // creating an object for each spot
@@ -125,7 +131,7 @@ function draw() {
     closedSet.push(current);
 
     // we have the for loop to iterate over each neighbor
-    // now we wnat to give each neighbor that we evaluate a g score
+    // now we want to give each neighbor  a g score
     // gscore = time taken (cost) to reach that node
 
     // if we have already evaluted that node then we compare the old g with new g
@@ -133,7 +139,8 @@ function draw() {
     let neighbors = current.neighbors;
     for (let i = 0; i < neighbors.length; i++) {
       let neighbor = neighbors[i];
-
+      // if it is the closedSet then we have already evaluated the node
+      //we do not need to evaleate the g again
       if (!closedSet.includes(neighbor)) {
         // here , current has g = 0; so every neighbor should have a g of +1
         let tempG = current.g + 1;
@@ -149,6 +156,9 @@ function draw() {
           // need to compare to find the most efficient path
           openSet.push(neighbor);
         }
+
+        neighbor.h = heuristic(neighbor, end);
+        neighbor.f = neighbor.g + neighbor.h;
       }
     }
   } else {
