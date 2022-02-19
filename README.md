@@ -115,6 +115,8 @@ this means it has a previous g score so we need to compare and assign it the low
 
 # Looping through array backwards
 
+(to remove an element form array )
+
 function removeFromArray(arr, element) {
 // loop through array backward so we do not skip an element
 for (let i = arr.length; i >= 0; i--) {
@@ -126,3 +128,27 @@ arr.splice(i, 1);
 
 lets say we delete the element 6; so the next time the loop will run for i =7;
 but the element that was at 7 is now at 6 so we can miss checking that element.
+
+# back tracking to find the most optimal path
+
+in the loop where we are assigning the g value we also add this line
+
+        neighbor.previous = current;
+
+and as we know current = openSet[winner];
+
+now even though when the neighbour is furhter evaluated in the future;
+when it takes the value as "current", it is going to have a previous property
+since we added that in the g loop
+
+path = [];
+let temp = current;
+path.push(temp);
+while (temp.previous) {
+path.push(temp.previous);
+temp = temp.previous;
+}
+
+using this loop we first add temp to loop; then as long
+as it has previous we keep adding the previous (previous node)
+backtracking our way to the start.

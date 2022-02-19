@@ -27,6 +27,9 @@ let start;
 let end;
 //defining for width and height of the rectangle
 let w, h;
+// gloabl variable for back tracking the most optimal path
+let path = [];
+let finalPath = [];
 
 function Spot(i, j) {
   this.i = i;
@@ -35,6 +38,7 @@ function Spot(i, j) {
   this.g = 0;
   this.h = 0;
   this.neighbors = [];
+  this.previous = undefined;
   // every spot has a location (i, j)
   // and they also have a f, g and h value
 
@@ -96,7 +100,7 @@ function setup() {
   // defining the start and the end node
   //   top left to bottom right
   start = grid[0][0];
-  end = grid[cols - 1][rows - 1];
+  end = grid[cols - 1][3];
   //adding our starting point to the openSet
   openSet.push(start);
 
@@ -118,10 +122,18 @@ function draw() {
       }
     }
     let current = openSet[winner];
+    path = [];
+    let temp = current;
+    path.push(temp);
+    while (temp.previous) {
+      path.push(temp.previous);
+      temp = temp.previous;
+    }
 
     // if the winner is end that means we have reached
     // the end; our loop if finished
     if (openSet[winner] === end) {
+      noLoop();
       console.log("DONE!");
     }
     // we remove the current because that is the lowest f we have
@@ -159,6 +171,11 @@ function draw() {
 
         neighbor.h = heuristic(neighbor, end);
         neighbor.f = neighbor.g + neighbor.h;
+        // tracking the path where we can from so that
+        // we can later back track the most optimal path
+        neighbor.previous = current;
+        // assigning a previous property to neighbour so it remembers
+        // where it came from
       }
     }
   } else {
@@ -171,6 +188,9 @@ function draw() {
   // now each gir[i][j] is a spot which a constructor function
   // and it has a property called show so we can use it as we did here with
   // dot notation
+
+  // finding the most optimal path
+
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       grid[i][j].show(color(255));
@@ -183,5 +203,9 @@ function draw() {
 
   for (let i = 0; i < openSet.length; i++) {
     openSet[i].show(color(0, 255, 0));
+  }
+
+  for (let i = 0; i < path.length; i++) {
+    path[i].show(color(0, 0, 255));
   }
 }
