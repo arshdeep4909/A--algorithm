@@ -41,6 +41,13 @@ function Spot(i, j) {
   this.h = 0;
   this.neighbors = [];
   this.previous = undefined;
+  // adding obstacles
+  //by default every path is not going to be a wall
+  this.wall = false;
+  // 10% of the  node being an obstacle
+  if (random(1) < 0.4) {
+    this.wall = true;
+  }
   // every spot has a location (i, j)
   // and they also have a f, g and h value
 
@@ -48,6 +55,10 @@ function Spot(i, j) {
   // we call this method in draw function()
   this.show = function (col) {
     fill(col);
+    // making the color of wall node black
+    if (this.wall) {
+      fill(0);
+    }
     rect(this.i * w, this.j * h, w, h);
   };
 
@@ -102,8 +113,12 @@ function setup() {
   // defining the start and the end node
   //   top left to bottom right
   start = grid[0][0];
-  end = grid[cols - 1][3];
+  end = grid[cols - 1][rows - 1];
   //adding our starting point to the openSet
+
+  //avoiding the start and end node to be a wall
+  start.wall = false;
+  end.wall = false;
   openSet.push(start);
 
   console.log(grid);
@@ -155,7 +170,7 @@ function draw() {
       let neighbor = neighbors[i];
       // if it is the closedSet then we have already evaluated the node
       //we do not need to evaleate the g again
-      if (!closedSet.includes(neighbor)) {
+      if (!closedSet.includes(neighbor) && !neighbor.wall) {
         // here , current has g = 0; so every neighbor should have a g of +1
         let tempG = current.g + 1;
 
@@ -182,6 +197,8 @@ function draw() {
     }
   } else {
     //no solution
+    noLoop();
+    console.log("no solution!");
   }
 
   background(0);
