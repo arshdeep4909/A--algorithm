@@ -9,8 +9,8 @@ function removeFromArray(arr, element) {
 
 function heuristic(a, b) {
   // dist is a p5 function
-  // var d = dist(a.i, a.j, b.i, b.j);
-  var d = abs(a.i - b.i) + abs(a.j - b.j);
+  var d = dist(a.i, a.j, b.i, b.j);
+  // var d = abs(a.i - b.i) + abs(a.j - b.j);
 
   return d;
 }
@@ -78,6 +78,20 @@ function Spot(i, j) {
 
     if (j > 0) {
       this.neighbors.push(grid[this.i][this.j - 1]);
+    }
+    // adding diagnols
+    if (i > 0 && j > 0) {
+      //adding top left neighbor
+      this.neighbors.push(grid[this.i - 1][this.j - 1]);
+    }
+    if (i < cols - 1 && j > 0) {
+      this.neighbors.push(grid[this.i + 1][this.j - 1]);
+    }
+    if (i > 0 && j < rows - 1) {
+      this.neighbors.push(grid[this.i - 1][this.j + 1]);
+    }
+    if (i < cols - 1 && j < rows - 1) {
+      this.neighbors.push(grid[this.i + 1][this.j + 1]);
     }
   };
 }
@@ -199,6 +213,7 @@ function draw() {
     //no solution
     noLoop();
     console.log("no solution!");
+    // return;
   }
 
   background(0);
