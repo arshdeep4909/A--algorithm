@@ -16,8 +16,8 @@ function heuristic(a, b) {
 }
 
 let grid = new Array();
-let cols = 25;
-let rows = 25;
+let cols = 50;
+let rows = 50;
 
 // defining openSet and closedSet as Arrays  in global variables
 // creating an object for each spot
@@ -188,9 +188,11 @@ function draw() {
         // here , current has g = 0; so every neighbor should have a g of +1
         let tempG = current.g + 1;
 
+        let newPath = false;
         if (openSet.includes(neighbor)) {
           if (tempG < neighbor.g) {
             neighbor.g = tempG;
+            newPath = true;
           }
         } else {
           neighbor.g = tempG;
@@ -198,15 +200,17 @@ function draw() {
           //we loop over the node that we have a previous g score that we
           // need to compare to find the most efficient path
           openSet.push(neighbor);
+          newPath = true;
         }
-
-        neighbor.h = heuristic(neighbor, end);
-        neighbor.f = neighbor.g + neighbor.h;
-        // tracking the path where we can from so that
-        // we can later back track the most optimal path
-        neighbor.previous = current;
-        // assigning a previous property to neighbour so it remembers
-        // where it came from
+        if (newPath) {
+          neighbor.h = heuristic(neighbor, end);
+          neighbor.f = neighbor.g + neighbor.h;
+          // tracking the path where we can from so that
+          // we can later back track the most optimal path
+          neighbor.previous = current;
+          // assigning a previous property to neighbour so it remembers
+          // where it came from
+        }
       }
     }
   } else {
