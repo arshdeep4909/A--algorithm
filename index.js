@@ -9,7 +9,9 @@ function removeFromArray(arr, element) {
 
 function heuristic(a, b) {
   // dist is a p5 function
-  var d = dist(a.i, a.j, b.i, b.j);
+  // var d = dist(a.i, a.j, b.i, b.j);
+  var d = abs(a.i - b.i) + abs(a.j - b.j);
+
   return d;
 }
 
